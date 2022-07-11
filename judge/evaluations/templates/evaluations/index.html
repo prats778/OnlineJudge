@@ -1,0 +1,11 @@
+{%block content%}
+{% if problems_list %}
+    <ol>
+        {% for problem in problems_list %}
+            <li><a href="{% url 'evaluations:problem_detail' problem.id %}">{{problem.name}}</a></li>
+        {% endfor %}
+    </ol> 
+{% else %}
+    <p>No problems ar available.</p>
+{% endif %}     
+{%endblock content%}      

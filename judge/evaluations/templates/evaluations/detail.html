@@ -1,0 +1,15 @@
+<h1 align="center">{{problem.name}}</h1>
+<p>{{problem.problem_statement}}</p>
+
+<form action="{% url 'evaluations:submit' problem.id %}" enctype="multipart/form-data" method="post">
+{% csrf_token %}
+    <fieldset>
+        <h3 align="center">Submit your code here</h3>
+         <div align="center">
+             <input type="file" id="solution" name="solution">
+             {% comment %} <textarea id="solution" name="solution" rows="10" cols="100"></textarea>    {% endcomment %}
+             {% comment %} <br></br> {% endcomment %}
+             <input type="submit" value="Submit">
+         </div>
+    </fieldset>
+</form>                 
