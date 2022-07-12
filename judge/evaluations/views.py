@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.urls import reverse
 from django.views import generic
 import os, filecmp
-
+from django import forms
 from .models import Problem, Solution
 # Create your views here.
 
@@ -19,11 +19,29 @@ def problemDetail(request, problem_id):
     return render(request,'evaluations/detail.html',{'problem':problem}) 
 
 def submitProblem(request,problem_id):
-    print(request.FILES)
-    f = request.FILES['solution']
+    # print(request.POST['code'])
+    f=0
+    flag=0
+    if len(request.POST['code']):
+        print("kuch hai")
+        f=request.POST['code']
+        flag=1
+    else:
+        print("khali hai")
+        f=request.FILES['solution']      
+        
+    # f = request.FILES['solution']
+
     with open('C:\\Users\\asus\\Desktop\\my_work\\OnlineJudge\\judge\\evaluations\\folders\\submission.cpp','wb+') as dest:
-        for chunk in f.chunks():
-            dest.write(chunk)
+        if not flag:
+            for chunk in f.chunks():
+                dest.write(chunk)
+        else:
+            print("executing code")
+            code=request.POST['code']
+            code=code.encode()
+            dest.write(code);
+
     os.system('g++ C:\\Users\\asus\\Desktop\\my_work\\OnlineJudge\\judge\\evaluations\\folders\\submission.cpp')
     os.system('a.exe < C:\\Users\\asus\\Desktop\\my_work\\OnlineJudge\\judge\\evaluations\\folders\\input.txt > C:\\Users\\asus\\Desktop\\my_work\\OnlineJudge\\judge\\evaluations\\folders\\output.txt')
 
