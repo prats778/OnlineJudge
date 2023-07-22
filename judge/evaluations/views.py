@@ -62,13 +62,18 @@ def submitProblem(request,problem_id):
     print("Output file ==>",output_file)
     print("Error file ==>",error_file)
 
+    mode='c++'
+
     with open(input_file,'r') as file, open(output_file, 'w') as outfile , open(error_file,'w') as errfile:
         # os.system('echo $MY_SUDO_PASS | sudo -S docker run -i docker-compiler /bin/bash -c "g++ evaluations/folders/submission.cpp; ./a.out < evaluations/folders/input.txt > evaluations/folders/output.txt;cat evaluations/folders/output.txt"')
         # subprocess.check_call(shlex.split("sudo docker run -i docker-compiler python evaluations/folders/test_docker.py"), stdin=file, stdout=outfile, stderr=errfile,timeout=15)
       subprocess.check_call(shlex.split("sudo docker run -id --name main_container docker-compiler"))
-      subprocess.check_call(shlex.split("sudo docker exec -i main_container python evaluations/folders/test_docker.py"), stdin=file, stdout=outfile, stderr=errfile,timeout=15)
-    #   subprocess.check_call(shlex.split("sudo docker exec main_container g++ evaluations/folders/submission.cpp"),stderr=errfile)
-    #   subprocess.check_call(shlex.split("sudo docker exec -i main_container ./a.out "),stdin=file, stdout=outfile, stderr=errfile, timeout=15) 
+      if mode == 'python':  
+        subprocess.check_call(shlex.split("sudo docker exec -i main_container python evaluations/folders/test_docker.py"), stdin=file, stdout=outfile, stderr=errfile,timeout=15)
+      else:  
+        subprocess.check_call(shlex.split("sudo docker exec main_container g++ evaluations/folders/submission.cpp"),stderr=errfile)
+        subprocess.check_call(shlex.split("sudo docker exec -i main_container ./a.out "),stdin=file, stdout=outfile, stderr=errfile, timeout=15) 
+
     print("Compiled Successfully Generated Output")       
     # Open a file: file
     file = open('evaluations/folders/output.txt',mode='r')
